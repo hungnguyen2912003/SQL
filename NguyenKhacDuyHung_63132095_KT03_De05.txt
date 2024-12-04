@@ -1,0 +1,110 @@
+Câu 1:
+create procedure shownv as
+BEGIN
+	declare @contro cursor;
+	set @contro = cursor for
+		select nv.manv, nv.honv + ' ' + nv.tenlot + ' ' + nv.tennv, ql.honv + ' ' + ql.tenlot + ' ' + ql.tennv
+		from NHANVIEN ql
+		LEFT JOIN NHANVIEN nv
+		on ql.manv = nv.ma_nql
+	open @contro;
+	declare @manv varchar(9);
+	declare @hotennv nvarchar(30);
+	declare @hotenql nvarchar(30);
+	fetch next from @contro into @manv, @hotennv, @hotenql;
+	while(@@FETCH_STATUS = 0)
+		BEGIN
+			print N'Mã nhân viên: ' + @manv;
+			print N'Họ tên nhân viên: ' + @hotennv;
+			print N'Họ tên người quản lý trực tiếp: ' + @hotenql;
+			print '-------------------------------';
+			fetch next from @contro into @manv, @hotennv, @hotenql;
+		END;
+	close @contro;
+	deallocate @contro;
+END;
+
+BEGIN
+	exec shownv;
+END;
+
+Câu 2:
+set xact_abort on
+begin tran
+	begin try
+		insert into PHONGBAN
+		values ('11', N'Kỹ thuật', '021', '2023-05-15');
+		insert into NHANVIEN
+		values ('021', N'Trần', N'Quang', N'Minh', '2002-09-14', N'144 Tôn Đức Thắng, Nha Trang', N'Nam', 45000, '021', '11');
+		commit
+	end try
+	begin catch
+		ROLLBACK
+		declare @ErrorMessage varchar(200);
+		select @ErrorMessage = ERROR_MESSAGE();
+		RAISERROR(@ErrorMessage, 16, 1);
+	end catch
+
+Câu 3:
+create trigger trg_kiemsoat_phongban
+on PHONGBAN
+FOR insert
+as
+begin
+	declare @maphg varchar(9);
+	declare @tuoi INT = 0;
+	select @maphg = maphg
+	from inserted
+
+	select @tuoi = DATEDIFF(YEAR, ngsinh, GETDATE())
+	FROM NHANVIEN tp
+	JOIN PHONGBAN pb
+	on tp.manv = pb.trphg
+	where @maphg = pb.maphg
+	if(@tuoi <= 30)
+	BEGIN
+		ROLLBACK TRANSACTION
+		RAISERROR('không được thêm trưởng phòng dưới 30 tuổi.', 16, 1)
+	END	
+end;
+Câu 4:
+create procedure phongbaninfo (@maphg varchar(9), @tenphg nvarchar(20) OUTPUT, @tentrphg nvarchar(30) OUTPUT, @sluong INT OUTPUT)
+as
+BEGIN
+	select @tenphg = pb.tenphg, @tentrphg = tp.tennv, @sluong = count(pc.soda)  
+	from PHANCONG pc
+	JOIN NHANVIEN tp
+	on pc.ma_nvien = tp.manv
+	JOIN PHONGBAN pb
+	on pb.trphg = tp.manv
+	where @maphg = pb.maphg
+	group by pb.tenphg, tp.tennv
+END;
+
+BEGIN
+	declare @tenphong nvarchar(30);
+	declare @tentrphong nvarchar(30);
+	declare @sl INT;
+	exec phongbaninfo '6', @tenphong OUTPUT, @tentrphong OUTPUT, @sl OUTPUT
+	print N'Tên phòng ban: ' + @tenphong;
+	print N'Tên trưởng phòng: ' + @tentrphong;
+	print N'Số lượng đề án phụ trách của phòng ban: ' + convert(varchar(3), @sl);
+END;
+
+Câu 5:
+create function func_nv (@maphg varchar(9)) RETURNS INT
+as
+BEGIN
+	declare @count INT;
+	select @count = COUNT(nv.manv)
+	from NHANVIEN nv
+	JOIN PHONGBAN pb
+	on nv.phg = pb.maphg
+	where @maphg = pb.maphg
+	RETURN @count;
+END;
+
+BEGIN
+	declare @sluong INT = dbo.func_nv('5');
+	print N'Số lượng nhân viên của phòng ban: ' + convert(varchar(3), @sluong);
+END;

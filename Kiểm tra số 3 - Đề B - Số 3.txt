@@ -1,0 +1,106 @@
+Câu 1: Hiển thị dạng văn bản cho biết danh sách các nhân viên gồm các thông tin: mã số nhân viên, họ và tên của nhân viên, tên thân nhân và quan hệ với nhân viên đó.
+create procedure shownv as
+BEGIN
+	declare @contro cursor;
+	set @contro = cursor for
+		select nv.manv, nv.honv + ' ' + nv.tenlot + ' ' + nv.tennv, tn.tentn, tn.quanhe
+		from THANNHAN tn
+		LEFT JOIN NHANVIEN nv
+		on tn.ma_nvien = nv.manv
+	open @contro;
+	declare @manv varchar(9);
+	declare @hotennv nvarchar(30);
+	declare @tentn nvarchar(30);
+	declare @quanhe nvarchar(10);
+	fetch next from @contro into @manv, @hotennv, @tentn, @quanhe;
+	while(@@FETCH_STATUS = 0)
+		BEGIN
+			print N'Mã nhân viên: ' + @manv;
+			print N'Họ tên nhân viên: ' + @hotennv;
+			print N'Tên thân nhân: ' + @tentn;
+			print N'Quan hệ: ' + @quanhe;
+			print '-------------------------------';
+			fetch next from @contro into @manv, @hotennv, @tentn, @quanhe;
+		END;
+	close @contro;
+	deallocate @contro;
+END;
+Câu 2: Tạo transaction thêm dữ liệu đầy đủ 1 phòng ban mới và 1 đề án mới do phòng ban đó phụ trách.
+begin tran
+	begin try
+		insert into PHONGBAN
+		values ('11', N'Kỹ thuật', '021', '2023-05-15');
+		insert into DEAN
+		values ('16', N'Xây dựng cầu Xóm Bóng', N'Nha Trang', '11');
+		commit
+	end try
+	begin catch
+		ROLLBACK
+		declare @ErrorMessage varchar(200);
+		select @ErrorMessage = ERROR_MESSAGE();
+		RAISERROR(@ErrorMessage, 16, 1);
+	end catch
+
+Câu 3: Tạo Trigger kiểm soát việc thêm dữ liệu phân công lao động của nhân viên. Nếu 1
+nhân viên có số lượng đề án tham gia đạt ngưỡng 3 đề án thì không được phân công tiếp
+đề án cho nhân viên đó
+CREATE TRIGGER trg_kiemsoat_phancong
+ON PHANCONG
+FOR INSERT
+AS
+BEGIN
+	DECLARE @ma_nvien varchar(9)
+	DECLARE @count int
+	SELECT @ma_nvien = ma_nvien 
+	FROM inserted
+	
+	SELECT @count = COUNT(soda) 
+	FROM PHANCONG 
+	WHERE ma_nvien = @ma_nvien
+	
+	IF (@count >= 3)
+	BEGIN
+		ROLLBACK TRANSACTION
+		RAISERROR('Không được phân công tiếp đề án cho nhân viên đã đạt ngưỡng 3 đề án.', 16, 1)
+	END
+END
+Câu 4: Viết thủ tục hoặc hàm thực hiện công việc sau: cho biết tên phòng ban, tên trưởng
+phòng và số lượng nhân viên của phòng ban có mã xác định trước.
+create procedure deaninfo (@maphg varchar(9), @tenpb nvarchar(30) OUTPUT, @tentp nvarchar(50) OUTPUT, @sl INT OUTPUT)
+as
+BEGIN
+	select @tenpb = pb.tenphg, @tentp = tp.tennv, @sl = count(tp.manv)
+	from PHONGBAN pb
+	LEFT JOIN NHANVIEN tp
+	on pb.trphg = tp.manv
+	where @maphg = pb.maphg
+	group by pb.tenphg, tp.tennv
+END;
+
+BEGIN
+	declare @tenphg nvarchar(30);
+	declare @tentrphg nvarchar(50);
+	declare @sluong INT;
+	exec deaninfo '6', @tenphg OUTPUT, @tentrphg OUTPUT, @sluong OUTPUT;
+	print N'Tên phòng ban: ' + @tenphg;
+	print N'Tổng trưởng phòng: ' + @tentrphg;
+	print N'Số lượng nhân viên của phòng ban: ' + convert(varchar(2), @sluong);
+END;
+Câu 5: Viết thủ tục hoặc hàm thực hiện công việc sau: cho biết lương trung bình của các
+nữ nhân viên của 1 phòng ban có mã xác định trước
+create function func_nvnu (@maphg varchar(2)) RETURNS DECIMAL
+as
+BEGIN
+	declare @luong decimal;
+	select @luong = avg(nv.luong) 
+	from NHANVIEN nv
+	LEFT JOIN PHONGBAN pb
+	on nv.phg = pb.maphg
+	where nv.phai LIKE N'Nữ' AND @maphg = pb.maphg
+	RETURN @luong;
+END;
+
+BEGIN
+	declare @luongtb decimal = dbo.func_nvnu('6');
+	print N'Lương trung bình các nhân viên nữ của phòng ban: ' + convert(varchar(20), @luongtb);
+END;

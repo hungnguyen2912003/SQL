@@ -1,0 +1,16 @@
+create function KT3_A_So1_Cau5 (@soda varchar(2)) RETURNS INT
+as
+begin 
+	declare @count INT;
+	select @count = count(*)
+	from PHANCONG pc
+	JOIN NHANVIEN nv
+	on pc.ma_nvien = nv.manv
+	where @soda = pc.soda AND nv.phai LIKE N'Nam';
+	RETURN @count;
+end;
+
+begin
+	declare @sluong INT = dbo.KT3_A_So1_Cau5('15');
+	print N'Số lượng nhân viên nam tham gia đề án: ' + convert(varchar(5), @sluong);
+end;

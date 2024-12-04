@@ -1,0 +1,43 @@
+Câu 1: Tạo transaction thêm dữ liệu đầy đủ 1 phòng ban mới và 1 nhân viên mới làm trưởng phòng của phòng ban đó. 
+Người quản lý trực tiếp của nhân viên mới cũng là chính người đó.
+
+set xact_abort on
+
+begin tran
+	begin try
+		insert PHONGBAN
+		values ('35', 'Văn phòng', NULL, GETDATE());
+		insert NHANVIEN
+		values ('041', N'Phạm', N'Đăng', N'Khoa', '2003-06-04', '144/4 Hai Tháng Tư, Nha Trang', N'Nam', 45000000, NULL, '35');
+		UPDATE PHONGBAN 
+		SET trphg = '041'
+		WHERE maphg = '35';
+		UPDATE NHANVIEN 
+		SET ma_nql = '041' 
+		WHERE manv = '041';
+		commit;
+	end try
+	begin catch
+		ROLLBACK;
+		declare @ErrorMessage  nvarchar(200);
+		select @ErrorMessage  = ERROR_MESSAGE();
+		RAISERROR(@ErrorMessage, 16, 1);
+	end catch;
+
+Câu 2: Tạo transaction thêm dữ liệu đầy đủ 1 1 nhân viên mới và 1 thân nhân mới của nhân viên đó
+set xact_abort on
+
+begin tran
+	begin try
+		insert NHANVIEN
+		values ('041', N'Phạm', N'Đăng', N'Khoa', '2003-06-04', '144/4 Hai Tháng Tư, Nha Trang', N'Nam', 45000000, '020', '40');
+		insert THANNHAN
+		values ('041', N'Phạm Hữu Thế', '2000-03-12', N'Nam', N'Chồng');
+		commit;
+	end try
+	begin catch
+		ROLLBACK
+		declare @ErrorMessage  nvarchar(200);
+		select @ErrorMessage  = ERROR_MESSAGE();
+		RAISERROR(@ErrorMessage, 16, 1);
+	end catch;

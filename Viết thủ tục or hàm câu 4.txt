@@ -1,0 +1,88 @@
+Câu 1: Viết thủ tục hoặc hàm thực hiện công việc sau: liệt kê tên đề án và tổng số giờ làm
+việc một tuần của tất cả các nhân viên tham dự một đề án cụ thể có mã số đề án được xác
+định trước.
+create procedure KT3_A_S1_Cau4 (@mada varchar(2), @tenda nvarchar(30) OUTPUT, @tongtg INT OUTPUT)
+as
+begin
+	select @tenda = da.tenda, @tongtg = sum(pc.thoigian)
+	from PHANCONG pc
+	JOIN DEAN da
+	on pc.soda = da.mada
+	where @mada = da.mada
+	group by da.tenda;
+end;
+
+begin 
+	declare @tendean nvarchar(30);
+	declare @sumthoigian INT;
+	exec dbo.KT3_A_S1_Cau4 '7', @tendean OUTPUT, @sumthoigian OUTPUT;
+	print N'Tên đề án: ' + @tendean;
+	print N'Tổng thời gian: ' + convert(varchar(5), @sumthoigian);
+end;
+Câu 2: Viết thủ tục hoặc hàm thực hiện công việc sau: liệt kê tên phòng ban và số lượng
+đề án của 1 phòng ban có mã xác định trước
+create procedure KT3_A_S2_Cau4 (@maphg varchar(9), @tenphg nvarchar(30) OUTPUT, @slda INT OUTPUT)
+as
+begin
+	select @tenphg = pb.tenphg, @slda = count(da.mada)
+	from PHONGBAN pb
+	JOIN DEAN da
+	on pb.maphg = da.phong
+	where @maphg = pb.maphg
+	group by pb.tenphg;
+end;
+
+begin 
+	declare @tenphong nvarchar(30);
+	declare @sluongdean INT;
+	exec dbo.KT3_A_S2_Cau4 '7', @tenphong OUTPUT, @sluongdean OUTPUT;
+	print N'Tên phòng ban: ' + @tenphong;
+	print N'Số lượng đề án: ' + convert(varchar(2), @sluongdean);
+end;
+Câu 3: Viết thủ tục hoặc hàm thực hiện công việc sau: cho biết tên phòng ban, tên trưởng
+phòng và số lượng nhân viên của phòng ban có mã xác định trước.
+create procedure KT3_B_S3_Cau4 (@maphg varchar(9), @tenphg nvarchar(30) OUTPUT, @tentp nvarchar(30) OUTPUT)
+as
+begin
+	select @tenphg = pb.tenphg, @tentp = tp.tennv
+	from PHONGBAN pb
+	JOIN NHANVIEN tp
+	on pb.trphg = tp.manv
+	where @maphg = pb.maphg
+	group by pb.tenphg, tp.tennv;
+end;
+
+begin 
+	declare @tenphong nvarchar(30);
+	declare @tentrphg nvarchar(30);
+	exec dbo.KT3_B_S3_Cau4 '7', @tenphong OUTPUT, @tentrphg OUTPUT;
+	print N'Tên phòng ban: ' + @tenphong;
+	print N'Trên trưởng phòng: ' + @tentrphg;
+end;
+Câu 4: Viết thủ tục hoặc hàm thực hiện công việc sau: liệt kê họ tên nhân viên và số lượng
+thân nhân của 1 nhân viên có mã xác định trước
+alter procedure KT3_B_S4_Cau4 (@manv varchar(9), @hotennv nvarchar(30) OUTPUT, @sltn INT OUTPUT)
+as
+begin
+	select @hotennv = nv.honv + nv.tenlot + nv.tennv, @sltn = count(tn.ma_nvien) 
+	from NHANVIEN nv
+	LEFT JOIN THANNHAN tn
+	on nv.manv = tn.ma_nvien
+	where @manv = nv.manv
+	group by nv.honv, nv.tenlot, nv.tennv;
+end;
+
+begin 
+	declare @hotennvien nvarchar(30);
+	declare @sluongthannhan INT;
+	exec dbo.KT3_B_S4_Cau4 '7', @hotennvien OUTPUT, @sluongthannhan OUTPUT;
+	print N'Họ tên nhân viên: ' + @hotennvien;
+	print N'Số lượng thân nhân: ' + convert(varchar(2), @sluongthannhan);
+end;
+Câu 5: Viết thủ tục hoặc hàm tính toán công việc sau: xuất dữ liệu họ tên người quản lý và
+số lượng nhân viên dưới quyền quản lý của 1 người quản lý có mã xác định trước.
+select ql.honv, ql.tenlot, ql.tennv, count(*)
+from NHANVIEN ql
+LEFT JOIN NHANVIEN nv
+on ql.manv = nv.ma_nql
+group by ql.honv, ql.tenlot, ql.tennv;

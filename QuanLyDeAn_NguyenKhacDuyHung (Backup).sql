@@ -1,0 +1,596 @@
+USE [master]
+GO
+/****** Object:  Database [QuanLyDeAn_NguyenKhacDuyHung]    Script Date: 21/06/2024 6:20:43 CH ******/
+CREATE DATABASE [QuanLyDeAn_NguyenKhacDuyHung]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'QuanLyDeAn_NguyenKhacDuyHung', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA\QuanLyDeAn_NguyenKhacDuyHung.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'QuanLyDeAn_NguyenKhacDuyHung_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA\QuanLyDeAn_NguyenKhacDuyHung_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET COMPATIBILITY_LEVEL = 150
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [QuanLyDeAn_NguyenKhacDuyHung].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET  ENABLE_BROKER 
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET RECOVERY FULL 
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET  MULTI_USER 
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+EXEC sys.sp_db_vardecimal_storage_format N'QuanLyDeAn_NguyenKhacDuyHung', N'ON'
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET QUERY_STORE = OFF
+GO
+USE [QuanLyDeAn_NguyenKhacDuyHung]
+GO
+/****** Object:  Table [dbo].[DEAN]    Script Date: 21/06/2024 6:20:43 CH ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[DEAN](
+	[MADA] [varchar](9) NOT NULL,
+	[TENDA] [nvarchar](50) NULL,
+	[DDIEM_DA] [nvarchar](20) NULL,
+	[PHONG] [varchar](2) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[MADA] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[DIADIEM_PHG]    Script Date: 21/06/2024 6:20:43 CH ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[DIADIEM_PHG](
+	[MAPHG] [varchar](2) NOT NULL,
+	[DIADIEM] [nvarchar](20) NOT NULL,
+ CONSTRAINT [PK_DIADIEM_PHG] PRIMARY KEY CLUSTERED 
+(
+	[MAPHG] ASC,
+	[DIADIEM] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[NHANVIEN]    Script Date: 21/06/2024 6:20:43 CH ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[NHANVIEN](
+	[MANV] [varchar](9) NOT NULL,
+	[HONV] [nvarchar](15) NULL,
+	[TENLOT] [nvarchar](30) NULL,
+	[TENNV] [nvarchar](30) NULL,
+	[NGSINH] [smalldatetime] NULL,
+	[DCHI] [nvarchar](150) NULL,
+	[PHAI] [nvarchar](3) NULL,
+	[LUONG] [numeric](18, 0) NULL,
+	[MA_NQL] [varchar](9) NULL,
+	[PHG] [varchar](2) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[MANV] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[PHANCONG]    Script Date: 21/06/2024 6:20:43 CH ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[PHANCONG](
+	[MA_NVIEN] [varchar](9) NOT NULL,
+	[SODA] [varchar](9) NOT NULL,
+	[THOIGIAN] [numeric](18, 0) NULL,
+ CONSTRAINT [PK_PHANCONG] PRIMARY KEY CLUSTERED 
+(
+	[MA_NVIEN] ASC,
+	[SODA] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[PHONGBAN]    Script Date: 21/06/2024 6:20:43 CH ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[PHONGBAN](
+	[MAPHG] [varchar](2) NOT NULL,
+	[TENPHG] [nvarchar](20) NULL,
+	[TRPHG] [varchar](9) NULL,
+	[NG_NHANCHUC] [smalldatetime] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[MAPHG] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[THANNHAN]    Script Date: 21/06/2024 6:20:43 CH ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[THANNHAN](
+	[MA_NVIEN] [varchar](9) NOT NULL,
+	[TENTN] [nvarchar](40) NOT NULL,
+	[NGSINH] [smalldatetime] NULL,
+	[PHAI] [nvarchar](3) NULL,
+	[QUANHE] [nvarchar](15) NULL,
+ CONSTRAINT [pk_thannhan] PRIMARY KEY CLUSTERED 
+(
+	[MA_NVIEN] ASC,
+	[TENTN] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+INSERT [dbo].[DEAN] ([MADA], [TENDA], [DDIEM_DA], [PHONG]) VALUES (N'DA001', N'Nghiên cứu chế tạo sợi Nanô Platin', N'TP Hồ Chí Minh', N'3')
+GO
+INSERT [dbo].[DEAN] ([MADA], [TENDA], [DDIEM_DA], [PHONG]) VALUES (N'DA002', N'Tạo vật liệu sinh học bằng màng ối người', N'TP Nha Trang', N'10')
+GO
+INSERT [dbo].[DEAN] ([MADA], [TENDA], [DDIEM_DA], [PHONG]) VALUES (N'DA003', N'Ứng dụng hóa học xanh', N'Hà Nội', N'2')
+GO
+INSERT [dbo].[DEAN] ([MADA], [TENDA], [DDIEM_DA], [PHONG]) VALUES (N'DA004', N'Nghiên cứu tế bào gốc', N'Đà Nẵng', N'5')
+GO
+INSERT [dbo].[DEAN] ([MADA], [TENDA], [DDIEM_DA], [PHONG]) VALUES (N'DA005', N'HTTT quản lý các trường ĐH', N'Đà Lạt', N'8')
+GO
+INSERT [dbo].[DEAN] ([MADA], [TENDA], [DDIEM_DA], [PHONG]) VALUES (N'DA006', N'HTTT quản lý thư viện ở các trường ĐH', N'Cần Thơ', N'1')
+GO
+INSERT [dbo].[DEAN] ([MADA], [TENDA], [DDIEM_DA], [PHONG]) VALUES (N'DA007', N'Xây dựng nhà máy chế biến thủy sản', N'Thừa Thiên Huế', N'2')
+GO
+INSERT [dbo].[DEAN] ([MADA], [TENDA], [DDIEM_DA], [PHONG]) VALUES (N'DA008', N'Quản lý cuộc thi chạy Marathon', N'Hải Phòng', N'7')
+GO
+INSERT [dbo].[DEAN] ([MADA], [TENDA], [DDIEM_DA], [PHONG]) VALUES (N'DA009', N'HTTT quản lý giáo vụ cho một Khoa', N'Quảng Trị', N'6')
+GO
+INSERT [dbo].[DEAN] ([MADA], [TENDA], [DDIEM_DA], [PHONG]) VALUES (N'DA010', N'Môi trường Xanh - Sạch - Đẹp', N'Lạng Sơn', N'5')
+GO
+INSERT [dbo].[DEAN] ([MADA], [TENDA], [DDIEM_DA], [PHONG]) VALUES (N'DA011', N'Xây dựng công xưởng nhà máy', N'Vũng Tàu', N'2')
+GO
+INSERT [dbo].[DEAN] ([MADA], [TENDA], [DDIEM_DA], [PHONG]) VALUES (N'DA012', N'Nghiên cứu mô hình người máy', N'Yên Bái', N'7')
+GO
+INSERT [dbo].[DEAN] ([MADA], [TENDA], [DDIEM_DA], [PHONG]) VALUES (N'DA013', N'Ứng dụng máy kéo sợi', N'Cao Bằng', N'6')
+GO
+INSERT [dbo].[DEAN] ([MADA], [TENDA], [DDIEM_DA], [PHONG]) VALUES (N'DA014', N'Ứng dụng phân tích dữ liệu', N'Nam Định', N'3')
+GO
+INSERT [dbo].[DEAN] ([MADA], [TENDA], [DDIEM_DA], [PHONG]) VALUES (N'DA015', N'Xây dựng cầu Vĩnh Phúc', N'Vĩnh Phúc', N'8')
+GO
+INSERT [dbo].[DEAN] ([MADA], [TENDA], [DDIEM_DA], [PHONG]) VALUES (N'DA016', N'Ứng dụng thiết kế Web cho công ty', N'TP Hồ Chí Minh', N'1')
+GO
+INSERT [dbo].[DEAN] ([MADA], [TENDA], [DDIEM_DA], [PHONG]) VALUES (N'DA017', N'Dự án Festival Biển', N'Nha Trang', N'1')
+GO
+INSERT [dbo].[DEAN] ([MADA], [TENDA], [DDIEM_DA], [PHONG]) VALUES (N'DA018', N'Nghiên cứu trí tuệ nhân tạo', N'Hà Nội', N'30')
+GO
+INSERT [dbo].[DEAN] ([MADA], [TENDA], [DDIEM_DA], [PHONG]) VALUES (N'DA019', N'Nghiên cứu lý thuyết về hoạt tính chống oxy hóa', N'Nghệ An', N'28')
+GO
+INSERT [dbo].[DEAN] ([MADA], [TENDA], [DDIEM_DA], [PHONG]) VALUES (N'DA020', N'Nghiên cứu enzyme lên lợi khuẩn Lactobacillus', N'TP Hồ Chí Minh', N'34')
+GO
+INSERT [dbo].[DEAN] ([MADA], [TENDA], [DDIEM_DA], [PHONG]) VALUES (N'DA021', N'Nghiên cứu chế tạo loại khẩu trang y tế', N'Đà Nẵng', N'22')
+GO
+INSERT [dbo].[DEAN] ([MADA], [TENDA], [DDIEM_DA], [PHONG]) VALUES (N'DA022', N'Khai thác lượng lớn dữ liệu tensor cho ứng dụng', N'Nha Trang', N'25')
+GO
+INSERT [dbo].[DEAN] ([MADA], [TENDA], [DDIEM_DA], [PHONG]) VALUES (N'DA023', N'Nghiên cứu làm sạch tạp chất trong biogas', N'Bình Định', N'35')
+GO
+INSERT [dbo].[DEAN] ([MADA], [TENDA], [DDIEM_DA], [PHONG]) VALUES (N'DA024', N'Nghiên cứu hiện tượng cộng hưởng cơ điện', N'Hội An', N'30')
+GO
+INSERT [dbo].[DEAN] ([MADA], [TENDA], [DDIEM_DA], [PHONG]) VALUES (N'DA025', N'Phát triển hệ thống mạng lưới', N'Cần Thơ', N'26')
+GO
+INSERT [dbo].[DEAN] ([MADA], [TENDA], [DDIEM_DA], [PHONG]) VALUES (N'DA026', N'Nghiên cứu, chế tạo robot giám sát', N'Hưng Yên', N'22')
+GO
+INSERT [dbo].[DEAN] ([MADA], [TENDA], [DDIEM_DA], [PHONG]) VALUES (N'DA027', N'Xây dựng mô hình đào tạo và bồi dưỡng giáo viên', N'Vinh', N'32')
+GO
+INSERT [dbo].[DEAN] ([MADA], [TENDA], [DDIEM_DA], [PHONG]) VALUES (N'DA028', N'Nghiên cứu xử lý mã độc trên điện toán đám mây', N'TP Hồ Chí Minh', N'18')
+GO
+INSERT [dbo].[DEAN] ([MADA], [TENDA], [DDIEM_DA], [PHONG]) VALUES (N'DA029', N'Xử lý tín hiệu video và nhận dạng cử chỉ', N'Hà Nội', N'25')
+GO
+INSERT [dbo].[DEAN] ([MADA], [TENDA], [DDIEM_DA], [PHONG]) VALUES (N'DA030', N'Nghiên cứu hiệu ứng Hall lượng tử', N'Đà Nẵng', N'30')
+GO
+INSERT [dbo].[DEAN] ([MADA], [TENDA], [DDIEM_DA], [PHONG]) VALUES (N'DA031', N'Nghiên cứu tổng hợp nano bạc, vàng', N'Nha Trang', N'38')
+GO
+INSERT [dbo].[DEAN] ([MADA], [TENDA], [DDIEM_DA], [PHONG]) VALUES (N'DA032', N'Nghiên cứu ứng dụng Luân trùng (Rotifera)', N'Tây Nguyên', N'40')
+GO
+INSERT [dbo].[DIADIEM_PHG] ([MAPHG], [DIADIEM]) VALUES (N'1', N'Nha Trang')
+GO
+INSERT [dbo].[DIADIEM_PHG] ([MAPHG], [DIADIEM]) VALUES (N'10', N'Ninh Thuận')
+GO
+INSERT [dbo].[DIADIEM_PHG] ([MAPHG], [DIADIEM]) VALUES (N'11', N'Nha Trang')
+GO
+INSERT [dbo].[DIADIEM_PHG] ([MAPHG], [DIADIEM]) VALUES (N'14', N'Đà Nẵng')
+GO
+INSERT [dbo].[DIADIEM_PHG] ([MAPHG], [DIADIEM]) VALUES (N'16', N'Nha Trang')
+GO
+INSERT [dbo].[DIADIEM_PHG] ([MAPHG], [DIADIEM]) VALUES (N'18', N'TP Hồ Chí Minh')
+GO
+INSERT [dbo].[DIADIEM_PHG] ([MAPHG], [DIADIEM]) VALUES (N'2', N'Hà Nội')
+GO
+INSERT [dbo].[DIADIEM_PHG] ([MAPHG], [DIADIEM]) VALUES (N'20', N'Hà Nội')
+GO
+INSERT [dbo].[DIADIEM_PHG] ([MAPHG], [DIADIEM]) VALUES (N'22', N'Hà Nội')
+GO
+INSERT [dbo].[DIADIEM_PHG] ([MAPHG], [DIADIEM]) VALUES (N'25', N'Cần Thơ')
+GO
+INSERT [dbo].[DIADIEM_PHG] ([MAPHG], [DIADIEM]) VALUES (N'28', N'Thừa Thiên Huế')
+GO
+INSERT [dbo].[DIADIEM_PHG] ([MAPHG], [DIADIEM]) VALUES (N'3', N'TP Hồ Chí Minh')
+GO
+INSERT [dbo].[DIADIEM_PHG] ([MAPHG], [DIADIEM]) VALUES (N'30', N'Đà Nẵng')
+GO
+INSERT [dbo].[DIADIEM_PHG] ([MAPHG], [DIADIEM]) VALUES (N'4', N'Đà Nẵng')
+GO
+INSERT [dbo].[DIADIEM_PHG] ([MAPHG], [DIADIEM]) VALUES (N'40', N'TP Hồ Chí Minh')
+GO
+INSERT [dbo].[DIADIEM_PHG] ([MAPHG], [DIADIEM]) VALUES (N'5', N'Hải Phòng')
+GO
+INSERT [dbo].[DIADIEM_PHG] ([MAPHG], [DIADIEM]) VALUES (N'6', N'Cần Thơ')
+GO
+INSERT [dbo].[DIADIEM_PHG] ([MAPHG], [DIADIEM]) VALUES (N'7', N'Vũng Tàu')
+GO
+INSERT [dbo].[DIADIEM_PHG] ([MAPHG], [DIADIEM]) VALUES (N'8', N'Thừa Thiên Huế')
+GO
+INSERT [dbo].[DIADIEM_PHG] ([MAPHG], [DIADIEM]) VALUES (N'9', N'Nghệ An')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'001', N'Nguyễn', N'Khắc', N'Duy Hưng', CAST(N'2003-01-29T00:00:00' AS SmallDateTime), N'1202/21 Hai Tháng Tư, TP Nha Trang', N'Nam', CAST(42500000 AS Numeric(18, 0)), N'004', N'4')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'002', N'Lê', N'Minh', N'Tính', CAST(N'1973-02-15T00:00:00' AS SmallDateTime), N'25/3 Lạc Long Quân, Q.10, TP Hồ Chí Minh', N'Nam', CAST(15000000 AS Numeric(18, 0)), N'012', N'6')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'003', N'Lê', N'Thanh', N'Sang', CAST(N'1954-10-23T00:00:00' AS SmallDateTime), N'234 3/2, TP Biên Hòa', N'Nam', CAST(54000000 AS Numeric(18, 0)), N'001', N'3')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'004', N'Trần', N'Anh', N'Tuấn', CAST(N'1977-08-06T00:00:00' AS SmallDateTime), N'22/11 Lý Thường Kiệt,TP Mỹ Tho', N'Nam', CAST(25000000 AS Numeric(18, 0)), N'003', N'1')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'005', N'Trần', N'Trung', N'Hiếu', CAST(N'1988-05-20T00:00:00' AS SmallDateTime), N'12/21 Võ Văn Ngân Thủ Đức, TP Hồ Chí Minh', N'Nam', CAST(35000000 AS Numeric(18, 0)), N'010', N'9')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'006', N'Nguyễn', N'Ngọc', N'Ánh', CAST(N'1998-06-11T00:00:00' AS SmallDateTime), N'234 Trấn Não, An Phú, TP Hồ Chí Minh', N'Nữ', CAST(65000000 AS Numeric(18, 0)), N'004', N'8')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'007', N'Trần', N'Bạch', N'Tuyết', CAST(N'1993-12-12T00:00:00' AS SmallDateTime), N'17 Tuệ Tĩnh, Hà Nội', N'Nữ', CAST(13000000 AS Numeric(18, 0)), N'012', N'5')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'008', N'Đỗ', N'Bích', N'Trâm', CAST(N'2002-01-16T00:00:00' AS SmallDateTime), N'516 Phố Dư Thu Uyển, Thôn Miên Ý, Huyện Lộc Chiêu, Cần Thơ', N'Nữ', CAST(50000000 AS Numeric(18, 0)), N'001', N'6')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'009', N'Hồ', N'Thị', N'Ngân Anh', CAST(N'2001-07-06T00:00:00' AS SmallDateTime), N'548 Phố Đặng, Phường 1, Quận 86, Phú Yên', N'Nữ', CAST(32000000 AS Numeric(18, 0)), N'003', N'9')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'010', N'Trần', N'Mỹ', N'Duyên', CAST(N'2001-09-19T00:00:00' AS SmallDateTime), N'18 Phố Trương Phước Du, Xã 94, Huyện Mỹ, Hậu Giang', N'Nữ', CAST(90000000 AS Numeric(18, 0)), N'010', N'7')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'011', N'Phạm', N'Minh', N'Hoàng', CAST(N'1992-04-17T00:00:00' AS SmallDateTime), N'245 Phố Hùng Khánh Toản, Xã Bích Lều, Quận 42, Vĩnh Phúc', N'Nam', CAST(75000000 AS Numeric(18, 0)), N'008', N'10')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'012', N'Nguyễn', N'Thiên', N'Ân', CAST(N'1996-08-06T00:00:00' AS SmallDateTime), N'65, Thôn Ly Ca, Phường 25, Huyện Lại Võ, Bạc Liêu', N'Nam', CAST(150000000 AS Numeric(18, 0)), N'016', N'5')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'013', N'Nguyễn', N'Duy', N'Tân', CAST(N'1997-11-23T00:00:00' AS SmallDateTime), N'34 Phố Bồ, Xã 71, Quận 04, Hải Phòng', N'Nam', CAST(100000000 AS Numeric(18, 0)), N'020', N'7')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'014', N'Phạm', N'Thanh', N'Khang', CAST(N'2002-10-25T00:00:00' AS SmallDateTime), N'62 Phố Vừ Miên Hảo, Xã Lộ, Huyện Oanh, Lào Cai', N'Nam', CAST(55000000 AS Numeric(18, 0)), N'007', N'8')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'015', N'Lê', N'Sĩ', N'Phú', CAST(N'2000-02-04T00:00:00' AS SmallDateTime), N'700 Phố Sang, Xã Cơ Đậu, Huyện Tào Chiêu Phong, Hà Nội', N'Nam', CAST(75000000 AS Numeric(18, 0)), N'014', N'2')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'016', N'Nguyễn', N'Thị', N'Ngọc Hân', CAST(N'1999-03-30T00:00:00' AS SmallDateTime), N'Số 1, Thôn Phương Mỹ, Phường Đồng Hường Hoa, Quận Giang Điệp, Bình Dương', N'Nữ', CAST(130000000 AS Numeric(18, 0)), N'014', N'3')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'017', N'Đoàn Nguyễn', N'Thuỳ', N'Linh', CAST(N'1995-05-07T00:00:00' AS SmallDateTime), N'3076, Ấp Hứa Tuyền, Thôn Triệu Chấn, Huyện Hoàng Ngân, Kiên Giang', N'Nữ', CAST(40000000 AS Numeric(18, 0)), N'007', N'10')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'018', N'Võ', N'Quỳnh', N'Hương', CAST(N'2004-08-26T00:00:00' AS SmallDateTime), N'788 Phố Châu Nhã Bắc, Xã Ánh, Quận Quân Trác, Đà Nẵng', N'Nữ', CAST(35500000 AS Numeric(18, 0)), N'020', N'2')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'019', N'Lê', N'Thanh', N'Tú', CAST(N'2000-04-29T00:00:00' AS SmallDateTime), N'Số 18, Thôn 26, Xã Toại Nghiêm, Quận 29, Hậu Giang', N'Nữ', CAST(20000000 AS Numeric(18, 0)), N'016', N'1')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'020', N'Đinh', N'Hoài', N'An', CAST(N'1991-07-10T00:00:00' AS SmallDateTime), N'88, Thôn 32, Ấp Uyển Hoan, Huyện Dân Học, Đồng Tháp', N'Nữ', CAST(62500000 AS Numeric(18, 0)), N'008', N'4')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'021', N'Trần', N'Mai', N'Yến Nhi', CAST(N'1999-02-09T00:00:00' AS SmallDateTime), N'35 Hai Bà Trưng, Hà Nội', N'Nữ', CAST(3500000 AS Numeric(18, 0)), N'024', N'11')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'022', N'Ngô', N'Thanh', N'Sương', CAST(N'2004-11-30T00:00:00' AS SmallDateTime), N'7A Hùng Vương, Quận 5, TP Hồ Chí Minh', N'Nữ', CAST(15000000 AS Numeric(18, 0)), N'030', N'20')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'023', N'Hoàng', N'Phúc', N'Hưng', CAST(N'1991-07-10T00:00:00' AS SmallDateTime), N'226/5, Quận Ô Môn, Cần Thơ', N'Nam', CAST(9500000 AS Numeric(18, 0)), N'024', N'18')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'024', N'Lê', N'Đình', N'Khiêm', CAST(N'2001-10-18T00:00:00' AS SmallDateTime), N'779 Lê Hồng Phong, Quận 10, TP Hồ Chí Minh', N'Nam', CAST(25000000 AS Numeric(18, 0)), N'030', N'14')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'025', N'Lê', N'Xuân', N'An', CAST(N'1989-03-14T00:00:00' AS SmallDateTime), N'91 Nguyễn Cư Trinh Ward Dist. 1, TP Hồ Chí Minh', N'Nữ', CAST(6500000 AS Numeric(18, 0)), N'026', N'16')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'026', N'Võ', N'Thanh', N'Ngân', CAST(N'1993-12-08T00:00:00' AS SmallDateTime), N'122 Nguyễn Trãi, Thanh Hoá', N'Nữ', CAST(5000000 AS Numeric(18, 0)), N'028', N'18')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'027', N'Nguyễn', N'Thiện', N'Nhân', CAST(N'2000-06-02T00:00:00' AS SmallDateTime), N'1152 Lương Sơn, Khánh Hoà', N'Nam', CAST(4500000 AS Numeric(18, 0)), N'026', N'20')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'028', N'Nguyễn', N'Trọng', N'Tín', CAST(N'1997-01-15T00:00:00' AS SmallDateTime), N'198/2A Trần Quốc Toản, Vũng Tàu', N'Nam', CAST(18000000 AS Numeric(18, 0)), N'028', N'11')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'029', N'Trần', N'Thị', N'Cẩm Tú', CAST(N'1995-10-25T00:00:00' AS SmallDateTime), N'555B Võ Văn Kiệt, Khánh Hoà', N'Nữ', CAST(15000000 AS Numeric(18, 0)), N'024', N'16')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'030', N'Phạm', N'Thị', N'Kim Thuỷ', CAST(N'2003-12-12T00:00:00' AS SmallDateTime), N'1767 Nguyễn Đình Chiểu, Hà Nội', N'Nữ', CAST(20000000 AS Numeric(18, 0)), N'028', N'14')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'031', N'Nguyễn', N'Phạm', N'Thịnh', CAST(N'1992-09-10T00:00:00' AS SmallDateTime), N'15/4A Võ Thị Sáu, TP Hồ Chí Minh', N'Nam', CAST(2000000 AS Numeric(18, 0)), N'029', N'22')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'032', N'Lê', N'Hoàng', N'Lan', CAST(N'2000-01-05T00:00:00' AS SmallDateTime), N'65B Điện Biên Phủ, Khánh Hoà', N'Nữ', CAST(10000000 AS Numeric(18, 0)), N'024', N'25')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'033', N'Phạm', N'Bảo', N'Ngân', CAST(N'1990-04-02T00:00:00' AS SmallDateTime), N'1444 Trương Quyền, Hải Phòng', N'Nữ', CAST(4000000 AS Numeric(18, 0)), N'038', N'28')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'034', N'Nguyễn', N'Bảo', N'Khánh', CAST(N'2003-12-14T00:00:00' AS SmallDateTime), N'233 Lý Tự Trọng, Cà Mau', N'Nam', CAST(3000000 AS Numeric(18, 0)), N'020', N'30')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'035', N'Đặng', N'Minh', N'Hoà', CAST(N'1985-08-20T00:00:00' AS SmallDateTime), N'10A Tôn Thất Tùng, Quận 2, TP Hồ Chí Minh', N'Nam', CAST(7000000 AS Numeric(18, 0)), N'035', N'28')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'036', N'Nguyễn', N'Thị', N'Nga', CAST(N'1999-05-12T00:00:00' AS SmallDateTime), N'1204/11 Nguyễn Thái Học, Đà Nẵng', N'Nữ', CAST(15000000 AS Numeric(18, 0)), N'026', N'40')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'037', N'Phạm', N'Chí', N'Khoa', CAST(N'1998-01-09T00:00:00' AS SmallDateTime), N'355 Trần Hưng Đạo, Khánh Hoà', N'Nam', CAST(3500000 AS Numeric(18, 0)), N'030', N'40')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'038', N'Ngô', N'Thanh', N'Vân', CAST(N'1994-08-24T00:00:00' AS SmallDateTime), N'75B Yên Lãng, Hà Nội', N'Nữ', CAST(2500000 AS Numeric(18, 0)), N'035', N'22')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'039', N'Lê', N'Minh', N'Tâm', CAST(N'2003-08-05T00:00:00' AS SmallDateTime), N'54 Nguyễn Hữu Thọ, Đà Nẵng', N'Nữ', CAST(20000000 AS Numeric(18, 0)), N'040', N'25')
+GO
+INSERT [dbo].[NHANVIEN] ([MANV], [HONV], [TENLOT], [TENNV], [NGSINH], [DCHI], [PHAI], [LUONG], [MA_NQL], [PHG]) VALUES (N'040', N'Nguyễn', N'Minh', N'Vũ', CAST(N'2000-02-21T00:00:00' AS SmallDateTime), N'417 Trần Quý Cáp, Khánh Hoà', N'Nam', CAST(25000000 AS Numeric(18, 0)), N'034', N'30')
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'001', N'DA007', CAST(135 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'001', N'DA016', CAST(150 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'002', N'DA001', CAST(120 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'002', N'DA010', CAST(125 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'003', N'DA003', CAST(175 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'003', N'DA020', CAST(110 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'004', N'DA013', CAST(140 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'005', N'DA002', CAST(185 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'005', N'DA010', CAST(305 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'006', N'DA008', CAST(160 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'006', N'DA009', CAST(275 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'007', N'DA005', CAST(320 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'007', N'DA025', CAST(145 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'008', N'DA002', CAST(110 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'009', N'DA015', CAST(130 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'009', N'DA016', CAST(120 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'010', N'DA011', CAST(230 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'011', N'DA001', CAST(185 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'011', N'DA006', CAST(200 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'011', N'DA024', CAST(100 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'012', N'DA012', CAST(190 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'013', N'DA006', CAST(190 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'013', N'DA008', CAST(145 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'014', N'DA014', CAST(160 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'015', N'DA003', CAST(135 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'015', N'DA004', CAST(180 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'015', N'DA022', CAST(185 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'017', N'DA011', CAST(124 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'020', N'DA009', CAST(185 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'020', N'DA012', CAST(165 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'021', N'DA028', CAST(130 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'021', N'DA030', CAST(250 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'021', N'DA031', CAST(300 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'022', N'DA015', CAST(250 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'022', N'DA032', CAST(340 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'023', N'DA013', CAST(400 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'023', N'DA015', CAST(390 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'023', N'DA023', CAST(240 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'023', N'DA030', CAST(600 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'024', N'DA031', CAST(200 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'025', N'DA023', CAST(350 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'025', N'DA026', CAST(450 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'026', N'DA020', CAST(500 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'026', N'DA028', CAST(700 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'026', N'DA029', CAST(450 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'027', N'DA001', CAST(320 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'027', N'DA030', CAST(300 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'028', N'DA006', CAST(270 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'029', N'DA009', CAST(430 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'030', N'DA010', CAST(450 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'030', N'DA011', CAST(190 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'030', N'DA014', CAST(400 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'030', N'DA018', CAST(380 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'031', N'DA022', CAST(650 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'031', N'DA025', CAST(750 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'032', N'DA003', CAST(1000 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'033', N'DA004', CAST(300 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'034', N'DA007', CAST(540 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'034', N'DA014', CAST(550 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'035', N'DA017', CAST(600 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'035', N'DA028', CAST(200 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'036', N'DA005', CAST(150 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'036', N'DA010', CAST(120 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'036', N'DA023', CAST(430 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'037', N'DA009', CAST(820 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'038', N'DA002', CAST(300 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'039', N'DA001', CAST(420 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'039', N'DA015', CAST(650 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'040', N'DA004', CAST(620 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'040', N'DA005', CAST(400 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'040', N'DA007', CAST(550 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'040', N'DA008', CAST(720 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHANCONG] ([MA_NVIEN], [SODA], [THOIGIAN]) VALUES (N'040', N'DA027', CAST(550 AS Numeric(18, 0)))
+GO
+INSERT [dbo].[PHONGBAN] ([MAPHG], [TENPHG], [TRPHG], [NG_NHANCHUC]) VALUES (N'1', N'Quản lý', N'005', CAST(N'2013-02-01T00:00:00' AS SmallDateTime))
+GO
+INSERT [dbo].[PHONGBAN] ([MAPHG], [TENPHG], [TRPHG], [NG_NHANCHUC]) VALUES (N'10', N'Hành chính', N'008', CAST(N'2022-04-18T00:00:00' AS SmallDateTime))
+GO
+INSERT [dbo].[PHONGBAN] ([MAPHG], [TENPHG], [TRPHG], [NG_NHANCHUC]) VALUES (N'11', N'Thiết kế', N'024', CAST(N'2023-04-02T00:00:00' AS SmallDateTime))
+GO
+INSERT [dbo].[PHONGBAN] ([MAPHG], [TENPHG], [TRPHG], [NG_NHANCHUC]) VALUES (N'14', N'Sản xuất', N'035', CAST(N'2015-12-31T00:00:00' AS SmallDateTime))
+GO
+INSERT [dbo].[PHONGBAN] ([MAPHG], [TENPHG], [TRPHG], [NG_NHANCHUC]) VALUES (N'16', N'Chăm sóc khách hàng', N'040', CAST(N'2025-09-18T00:00:00' AS SmallDateTime))
+GO
+INSERT [dbo].[PHONGBAN] ([MAPHG], [TENPHG], [TRPHG], [NG_NHANCHUC]) VALUES (N'18', N'An ninh', N'021', CAST(N'2022-08-10T00:00:00' AS SmallDateTime))
+GO
+INSERT [dbo].[PHONGBAN] ([MAPHG], [TENPHG], [TRPHG], [NG_NHANCHUC]) VALUES (N'2', N'Kế toán', N'020', CAST(N'2019-09-23T00:00:00' AS SmallDateTime))
+GO
+INSERT [dbo].[PHONGBAN] ([MAPHG], [TENPHG], [TRPHG], [NG_NHANCHUC]) VALUES (N'20', N'Kiểm thử', N'028', CAST(N'2017-11-22T00:00:00' AS SmallDateTime))
+GO
+INSERT [dbo].[PHONGBAN] ([MAPHG], [TENPHG], [TRPHG], [NG_NHANCHUC]) VALUES (N'22', N'Phó Giám Đốc', N'034', CAST(N'2024-01-01T00:00:00' AS SmallDateTime))
+GO
+INSERT [dbo].[PHONGBAN] ([MAPHG], [TENPHG], [TRPHG], [NG_NHANCHUC]) VALUES (N'25', N'Kế hoạch', N'038', CAST(N'2020-02-15T00:00:00' AS SmallDateTime))
+GO
+INSERT [dbo].[PHONGBAN] ([MAPHG], [TENPHG], [TRPHG], [NG_NHANCHUC]) VALUES (N'28', N'Đào tạo', N'032', CAST(N'2026-07-05T00:00:00' AS SmallDateTime))
+GO
+INSERT [dbo].[PHONGBAN] ([MAPHG], [TENPHG], [TRPHG], [NG_NHANCHUC]) VALUES (N'3', N'Điều hành', N'012', CAST(N'2020-01-15T00:00:00' AS SmallDateTime))
+GO
+INSERT [dbo].[PHONGBAN] ([MAPHG], [TENPHG], [TRPHG], [NG_NHANCHUC]) VALUES (N'30', N'Bảo hành', N'026', CAST(N'2019-09-29T00:00:00' AS SmallDateTime))
+GO
+INSERT [dbo].[PHONGBAN] ([MAPHG], [TENPHG], [TRPHG], [NG_NHANCHUC]) VALUES (N'4', N'Kinh doanh', N'010', CAST(N'2022-03-29T00:00:00' AS SmallDateTime))
+GO
+INSERT [dbo].[PHONGBAN] ([MAPHG], [TENPHG], [TRPHG], [NG_NHANCHUC]) VALUES (N'40', N'Quan hệ quốc tế', N'033', CAST(N'2017-03-24T00:00:00' AS SmallDateTime))
+GO
+INSERT [dbo].[PHONGBAN] ([MAPHG], [TENPHG], [TRPHG], [NG_NHANCHUC]) VALUES (N'5', N'Marketing', N'003', CAST(N'2010-05-12T00:00:00' AS SmallDateTime))
+GO
+INSERT [dbo].[PHONGBAN] ([MAPHG], [TENPHG], [TRPHG], [NG_NHANCHUC]) VALUES (N'6', N'Công nghệ', N'007', CAST(N'2018-11-23T00:00:00' AS SmallDateTime))
+GO
+INSERT [dbo].[PHONGBAN] ([MAPHG], [TENPHG], [TRPHG], [NG_NHANCHUC]) VALUES (N'7', N'Thư viện', N'019', CAST(N'2021-12-31T00:00:00' AS SmallDateTime))
+GO
+INSERT [dbo].[PHONGBAN] ([MAPHG], [TENPHG], [TRPHG], [NG_NHANCHUC]) VALUES (N'8', N'Nhân sự', N'001', CAST(N'2023-07-10T00:00:00' AS SmallDateTime))
+GO
+INSERT [dbo].[PHONGBAN] ([MAPHG], [TENPHG], [TRPHG], [NG_NHANCHUC]) VALUES (N'9', N'Nghiên cứu', N'015', CAST(N'2023-10-02T00:00:00' AS SmallDateTime))
+GO
+ALTER TABLE [dbo].[DIADIEM_PHG]  WITH CHECK ADD  CONSTRAINT [FK_DDIEM_PHONGBAN] FOREIGN KEY([MAPHG])
+REFERENCES [dbo].[PHONGBAN] ([MAPHG])
+GO
+ALTER TABLE [dbo].[DIADIEM_PHG] CHECK CONSTRAINT [FK_DDIEM_PHONGBAN]
+GO
+ALTER TABLE [dbo].[NHANVIEN]  WITH CHECK ADD  CONSTRAINT [FK_NHANVIEN_NHANVIEN] FOREIGN KEY([MA_NQL])
+REFERENCES [dbo].[NHANVIEN] ([MANV])
+GO
+ALTER TABLE [dbo].[NHANVIEN] CHECK CONSTRAINT [FK_NHANVIEN_NHANVIEN]
+GO
+ALTER TABLE [dbo].[NHANVIEN]  WITH CHECK ADD  CONSTRAINT [FK_NHANVIEN_PHONGBAN] FOREIGN KEY([PHG])
+REFERENCES [dbo].[PHONGBAN] ([MAPHG])
+GO
+ALTER TABLE [dbo].[NHANVIEN] CHECK CONSTRAINT [FK_NHANVIEN_PHONGBAN]
+GO
+ALTER TABLE [dbo].[PHANCONG]  WITH CHECK ADD  CONSTRAINT [FK_PHANCONG_DEAN] FOREIGN KEY([SODA])
+REFERENCES [dbo].[DEAN] ([MADA])
+GO
+ALTER TABLE [dbo].[PHANCONG] CHECK CONSTRAINT [FK_PHANCONG_DEAN]
+GO
+ALTER TABLE [dbo].[PHANCONG]  WITH CHECK ADD  CONSTRAINT [FK_PHANCONG_NHANVIEN] FOREIGN KEY([MA_NVIEN])
+REFERENCES [dbo].[NHANVIEN] ([MANV])
+GO
+ALTER TABLE [dbo].[PHANCONG] CHECK CONSTRAINT [FK_PHANCONG_NHANVIEN]
+GO
+ALTER TABLE [dbo].[PHONGBAN]  WITH CHECK ADD  CONSTRAINT [FK_PHONGBAN_NHANVIEN] FOREIGN KEY([TRPHG])
+REFERENCES [dbo].[NHANVIEN] ([MANV])
+GO
+ALTER TABLE [dbo].[PHONGBAN] CHECK CONSTRAINT [FK_PHONGBAN_NHANVIEN]
+GO
+ALTER TABLE [dbo].[THANNHAN]  WITH CHECK ADD  CONSTRAINT [FK_THANNHAN_NHANVIEN] FOREIGN KEY([MA_NVIEN])
+REFERENCES [dbo].[NHANVIEN] ([MANV])
+GO
+ALTER TABLE [dbo].[THANNHAN] CHECK CONSTRAINT [FK_THANNHAN_NHANVIEN]
+GO
+USE [master]
+GO
+ALTER DATABASE [QuanLyDeAn_NguyenKhacDuyHung] SET  READ_WRITE 
+GO

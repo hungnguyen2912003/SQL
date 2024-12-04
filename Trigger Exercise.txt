@@ -1,0 +1,131 @@
+Câu 1: Tạo Trigger kiểm soát lương của nhân viên mới khi thêm dữ liệu nhân viên. Nếu
+lương của nhân viên > 50.000.000 thì thiết lập về mức 50.000.000
+
+create trigger trg_nhanvien_kiemsoat
+on NHANVIEN
+for INSERT
+as
+begin
+	declare @luong numeric(18, 1);
+
+	select @luong = NHANVIEN.luong
+	from inserted, NHANVIEN
+	where inserted.manv = NHANVIEN.manv;
+
+	if(@luong > 50000000)
+	begin
+		update NHANVIEN
+		set luong = 50000000
+		from inserted, NHANVIEN
+		where inserted.manv = NHANVIEN.manv;
+	end;
+end;
+
+Câu 2: Tạo Trigger kiểm soát lương của nhân viên mới khi thêm dữ liệu. Nếu lương của nhân viên < 5.000.000 thì thiết lập về mức 5.000.000
+create trigger trg_nhanvien_kiemsoat
+on NHANVIEN
+for INSERT
+as
+begin
+	declare @luong numeric(18, 1);
+
+	select @luong = NHANVIEN.luong
+	from inserted, NHANVIEN
+	where inserted.manv = NHANVIEN.manv;
+
+	if(@luong < 5000000)
+	begin
+		update NHANVIEN
+		set luong = 5000000
+		from inserted, NHANVIEN
+		where inserted.manv = NHANVIEN.manv;
+	end;
+end;
+
+Câu 3: Tạo Trigger kiểm soát việc thêm dữ liệu phân công lao động của nhân viên. Nếu 1
+nhân viên có số lượng đề án tham gia đạt ngưỡng 3 đề án thì không được phân công tiếp
+đề án cho nhân viên đó
+create trigger trg_kiemsoat_phancong
+on PHANCONG
+for INSERT
+as
+begin
+	declare @count INT;
+	
+	select @count = PHANCONG.ma_nvien
+	from inserted
+	JOIN PHANCONG
+	on inserted.ma_nvien = PHANCONG.ma_nvien;
+	if(@count >= 3)
+	begin
+		RAISERROR(N'Đã đạt hơn 3 đề án', 16, 1);
+		ROLLBACK TRANSACTION;
+		RETURN;
+	end;
+end;
+
+Câu 4: Tạo Trigger kiểm soát việc thêm dữ liệu đề án sao cho 1 phòng ban không được
+phụ trách quá 5 đề án
+
+create trigger trg_kiemsoat_dean
+on dbo.DEAN
+for INSERT
+as
+begin
+	
+	declare @slphong INT;
+
+	select @slphong = DEAN.phong
+	from inserted
+	JOIN DEAN
+	on inserted.mada = DEAN.mada;
+
+	if(@slphong > 5)
+	begin
+		RAISERROR('Phòng ban không phụ trách quá 5 đề án', 50, 1);
+	end;
+end;
+
+Câu 5: Tạo Trigger kiểm soát việc thêm dữ liệu của phòng ban sao cho trưởng phòng phải có tuổi trên 30.
+
+create trigger trg_kiemsoat_phongban
+on PHONGBAN
+for INSERT
+as
+begin
+	declare @tuoi INT;
+
+	select @tuoi = YEAR(GETDATE()) - YEAR(NHANVIEN.ngsinh)
+	from inserted
+	JOIN PHONGBAN
+	on inserted.maphg = PHONGBAN.maphg
+	JOIN NHANVIEN
+	on PHONGBAN.trphg = NHANVIEN.manv;
+
+	if(@tuoi <= 30)
+	begin
+		RAISERROR(N'Trưởng phòng phải có tuổi trên 30', 16, 1);
+		ROLLBACK TRANSACTION;
+	end;
+end;
+
+Câu 6: Tạo Trigger kiểm soát việc thêm dữ liệu phân công đề án sao cho 1 nhân viên không
+được thực hiện tổng cộng 180 giờ.
+create trigger trg_kiemsoat_pcong
+on PHANCONG
+for INSERT
+as
+begin
+	declare @tongtg INT;
+
+	select @tongtg = sum(PHANCONG.thoigian)
+	from inserted
+	JOIN PHANCONG
+	on inserted.ma_nvien = PHANCONG.ma_nvien;
+
+	if(@tongtg >= 180)
+	begin
+		RAISERROR('Nhân viên không thực hiện 180 giờ', 16, 1);
+		ROLLBACK TRANSACTION;
+	end;
+end;

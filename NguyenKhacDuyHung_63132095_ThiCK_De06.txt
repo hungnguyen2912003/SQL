@@ -1,0 +1,129 @@
+Câu 1:
+
+create procedure showds
+as
+begin
+	declare @contro cursor;
+	set @contro = cursor for
+		select pb.tenphg, tp.honv, tp.tenlot, tp.tennv, count(dd.diadiem)
+		from PHONGBAN pb
+		JOIN NHANVIEN tp
+		on pb.trphg = tp.manv
+		JOIN DIADIEM_PHG dd
+		on dd.maphg = pb.maphg
+		group by pb.tenphg, tp.honv, tp.tenlot, tp.tennv;
+	open @contro;
+	declare @tenphong nvarchar(20);
+	declare @hotp nvarchar(30);
+	declare @tenlottp nvarchar(30);
+	declare @tentp nvarchar(30);
+	declare @sluong	INT;
+	fetch next from @contro into @tenphong, @hotp, @tenlottp, @tentp, @sluong;
+	while (@@FETCH_STATUS = 0)
+		begin
+			print N'Tên phòng ban: ' + @tenphong;
+			print N'Họ tên trưởng phòng: ' + @hotp + ' ' + @tenlottp + ' ' + @tentp;
+			print N'Số lượng địa điểm triển khai đề án: ' + convert(varchar(2), @sluong);
+			print '-------------------------------------';
+			fetch next from @contro into @tenphong, @hotp, @tenlottp, @tentp, @sluong;
+		end;
+	close @contro;
+	deallocate @contro;
+end;
+
+begin
+	exec dbo.showds;
+end;
+
+Câu 2:
+
+set xact_abort on
+
+begin tran
+	begin try
+		update PHONGBAN
+		set tenphg = N'Kế toán'
+		where trphg = '666' AND tenphg LIKE N'Tài chính'
+		insert into NHANVIEN
+		values ('667', N'Nguyễn', N'Văn', N'An', '2002-03-12', N'Nha Trang', N'Nam', 5500000, '667', 'TC');
+		update PHONGBAN
+		set trphg = '667'
+		where tenphg = N'Tài chính'
+		commit
+	end try
+	begin catch
+		ROLLBACK;
+		declare @ErrorMessage  nvarchar(200);
+		select @ErrorMessage  = ERROR_MESSAGE();
+		RAISERROR(@ErrorMessage, 16, 1);
+	end catch
+
+Câu 3:
+
+create trigger trg_kiemsoat_phancong
+on PHANCONG
+for insert, update
+as
+begin
+	declare @slda INT;
+
+	select @slda = count(pc.soda)
+	from PHANCONG pc
+	JOIN inserted
+	on pc.ma_nvien = inserted.ma_nvien
+	JOIN NHANVIEN nv
+	on pc.ma_nvien = nv.manv
+	where nv.phai LIKE N'Nữ';
+
+	if(@slda > 3)
+	begin
+		RAISERROR('Nhân viên nữ không được tham gia quá 3 đề án', 16, 1);
+		ROLLBACK TRANSACTION;
+	end;
+end;
+
+Câu 4:
+
+create procedure Cau4_CK (@maphg varchar(2), @tenphg nvarchar(30) OUTPUT, @slnv INT OUTPUT)
+as
+begin
+	select @tenphg = pb.tenphg, @slnv = count(nv.manv)
+	from PHONGBAN pb
+	LEFT JOIN NHANVIEN nv
+	on pb.maphg = nv.phg
+	where @maphg = pb.maphg
+	group by pb.tenphg;
+end;
+
+begin
+	declare @tenphong nvarchar(30);
+	declare @sluong INT;
+	exec Cau4_CK '14', @tenphong OUTPUT, @sluong OUTPUT;
+	print N'Tên phòng ban: ' + @tenphong;
+	print N'Tổng số lượng nhân viên quản lý của phòng ban: ' + convert(varchar(4), @sluong);
+end;
+
+Câu 5:
+
+create function Cau5_CK (@manv varchar(9)) RETURNS nvarchar(30)
+as
+begin
+	declare @hotentp nvarchar(30);
+	select top 1 @hotentp = (tp.honv + ' ' + tp.tenlot + ' ' + tp.tennv)
+	from NHANVIEN tp
+	JOIN PHONGBAN pb
+	on tp.manv = pb.trphg
+	JOIN NHANVIEN nv
+	on nv.phg = pb.maphg
+	JOIN PHANCONG pc
+	on nv.manv = pc.ma_nvien
+	where @manv = tp.manv
+	group by tp.honv, tp.tenlot, tp.tennv
+	order by count(pc.soda) desc
+	return @hotentp;
+end;
+
+begin
+	declare @hotentrpg nvarchar(30) = dbo.Cau5_CK('040');
+	print N'Họ tên trưởng phòng của nhân viên có số lượng đề án tham gia đề án nhiều nhất: ' + @hotentrpg;
+end;

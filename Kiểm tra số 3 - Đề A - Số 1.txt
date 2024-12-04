@@ -1,0 +1,110 @@
+Câu 1: Hiển thị dạng văn bản cho biết danh sách các nhân viên gồm các thông tin: mã số
+nhân viên, họ và tên của nhân viên, tên phòng ban nhân viên làm việc
+
+select nv.manv, nv.honv + ' ' + nv.tenlot + ' ' + nv.tennv, pb.tenphg
+from NHANVIEN nv
+join PHONGBAN pb
+on nv.phg = pb.maphg;
+
+create procedure shownv as
+BEGIN
+	declare @nv_ptr cursor;
+	set @nv_ptr = cursor for
+		select nv.manv, nv.honv + ' ' + nv.tenlot + ' ' + nv.tennv, pb.tenphg
+		from NHANVIEN nv
+		join PHONGBAN pb
+		on nv.phg = pb.maphg;
+	open @nv_ptr;
+	declare @manv		varchar(9);
+	declare @hotennv	nvarchar(30);
+	declare @tenphg		nvarchar(20);
+	fetch next from @nv_ptr into @manv, @hotennv, @tenphg;
+	while(@@FETCH_STATUS = 0)
+		BEGIN
+			print N'Mã nhân viên: ' + @manv;
+			print N'Họ tên nhân viên: ' + @hotennv;
+			print N'Tên phòng ban: ' + @tenphg;
+			print '---------------------------------------------';
+			fetch next from @nv_ptr into @manv, @hotennv, @tenphg;
+		END;
+	close @nv_ptr;
+	deallocate @nv_ptr;
+END;
+
+Câu 2: Tạo transaction thêm dữ liệu đầy đủ 1 phòng ban mới và 1 nhân viên mới làm trưởng phòng của phòng ban đó. 
+Người quản lý trực tiếp của nhân viên mới cũng là chính người đó.
+
+set xact_abort on
+
+begin tran
+	begin try
+		insert into PHONGBAN
+		values ('11', N'Kỹ thuật', '021', '2023-05-15');
+		insert into NHANVIEN
+		values ('021', N'Trần', N'Quang', N'Minh', '2002-09-14', N'144 Tôn Đức Thắng, Nha Trang', N'Nam', 45000, '021', '11');
+		commit
+	end try
+	begin catch
+		ROLLBACK
+		declare @ErrorMessage varchar(200);
+		select @ErrorMessage = ERROR_MESSAGE();
+		RAISERROR(@ErrorMessage, 16, 1);
+	end catch
+
+Câu 3: Tạo Trigger kiểm soát lương của nhân viên mới khi thêm dữ liệu nhân viên. Nếu
+lương của nhân viên > 50.000.000 thì thiết lập về mức 50.000.000
+
+create trigger trg_nv
+on NHANVIEN
+after insert
+as
+begin
+	update NHANVIEN
+	set luong = 50000000
+	from inserted
+	where (NHANVIEN.manv = inserted.manv) AND (NHANVIEN.luong > 50000000)
+end;
+
+Câu 4: Viết thủ tục hoặc hàm thực hiện công việc sau: liệt kê tên đề án và tổng số giờ làm
+việc một tuần của tất cả các nhân viên tham dự một đề án cụ thể có mã số đề án được xác
+định trước.
+
+create procedure deaninfo (@mada varchar(9), @tenda nvarchar(30) OUTPUT, @sogio INT OUTPUT)
+as
+BEGIN
+	select @tenda = da.tenda, @sogio = sum(pc.thoigian)
+	from PHANCONG pc
+	LEFT JOIN DEAN da
+	on pc.soda = da.mada
+	where @mada = da.mada
+	group by da.tenda;
+END;
+
+BEGIN
+	declare @tendean nvarchar(30);
+	declare @thoigian INT;
+	exec deaninfo '5', @tendean OUTPUT, @thoigian OUTPUT;
+	print N'Tên đề án: ' + @tendean;
+	print N'Tổng số giờ: ' + convert(varchar(5),@thoigian);
+END;
+
+
+Câu 5: Viết thủ tục hoặc hàm thực hiện công việc sau: cho biết số lượng nhân viên nữ mà
+một nhân viên có mã xác định quản lý trực tiếp.
+
+create function func_nv (@manv varchar(9)) RETURNS INT
+as
+BEGIN
+	declare @count INT;
+	select @count = count(nv.manv)
+	from NHANVIEN ql
+	LEFT JOIN NHANVIEN nv
+	on ql.ma_nql = nv.manv
+	where nv.phai LIKE N'Nữ'
+	RETURN @count;
+END;
+
+BEGIN
+	declare @sl INT = dbo.func_nv('005');
+	print N'Số lượng nhân viên nữ mà nhân viên đó quản lý: ' + convert(varchar(3), @sl);
+END;

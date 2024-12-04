@@ -1,0 +1,86 @@
+Câu 1: Hiển thị dạng văn bản cho biết danh sách các đề án gồm các thông tin: số đề án, họ
+tên nhân viên tham gia đề án, số giờ tham gia của nhân viên đó
+
+create procedure showda as
+BEGIN
+	declare @contro cursor;
+	set @contro = cursor for
+		select pc.soda, nv.honv + ' ' + nv.tenlot + ' ' + nv.tennv, pc.thoigian 
+		from PHANCONG pc
+		LEFT JOIN NHANVIEN nv
+		on pc.ma_nvien = nv.manv;
+	open @contro;
+	declare @sodean varchar(2);
+	declare @hotennv nvarchar(30);
+	declare @thoigian varchar(10);
+	fetch next from @contro into @sodean, @hotennv, @thoigian;
+	while(@@FETCH_STATUS = 0)
+		BEGIN
+			print N'Số đề án: ' + @sodean;
+			print N'Họ tên nhân viên: ' + @hotennv;
+			print N'Số giờ tham gia đề án: ' + convert(varchar(10), @thoigian);
+			print '-------------------------------';
+			fetch next from @contro into @sodean, @hotennv, @thoigian;
+		END;
+	close @contro;
+	deallocate @contro;
+END;
+
+Câu 2: Tạo transaction thêm dữ liệu đầy đủ 1 đề án mới và 1 phòng ban mới phụ trách đề án đó
+begin tran
+	begin try
+		insert into PHONGBAN
+		values ('11', N'Kỹ thuật', '021', '2023-05-15');
+		insert into DEAN
+		values ('16', N'Xây dựng cầu Xóm Bóng', N'Nha Trang', '11');
+		commit
+	end try
+	begin catch
+		ROLLBACK
+		declare @ErrorMessage varchar(200);
+		select @ErrorMessage = ERROR_MESSAGE();
+		RAISERROR(@ErrorMessage, 16, 1);
+	end catch
+Câu 3: Tạo Trigger kiểm soát việc thêm dữ liệu đề án sao cho 1 phòng ban không được phụ trách quá 5 đề án
+create trigger trg_kiemsoat_dean
+ON DEAN
+FOR INSERT
+BEGIN
+	declare @maphg varchar(2);
+	declare @count INT;
+
+    	SELECT @maphg = inserted.phong
+    	FROM inserted
+
+	SELECT @count = COUNT(mada) 
+	FROM DEAN 
+	WHERE phong = @maphg;
+
+	if(@count > 5)
+	BEGIN
+		ROLLBACK TRANSACTION
+		RAISERROR('không được phụ trách quá 5 đề án cho 1 phòng ban.', 16, 1)
+	END	
+END;
+Câu 4: Viết thủ tục hoặc hàm thực hiện công việc sau: liệt kê họ tên nhân viên và số lượng
+thân nhân của 1 nhân viên có mã xác định trước
+
+create procedure nvinfo (@manv varchar(9), @honv nvarchar(20) OUTPUT, @tenlot nvarchar(20) OUTPUT, @tennv nvarchar(20) OUTPUT, @sl INT OUTPUT)
+as
+BEGIN
+	select @honv = nv.honv, @tenlot = nv.tenlot, @tennv = nv.tennv, @sl = count(tn.ma_nvien)
+	from THANNHAN tn
+	LEFT JOIN NHANVIEN nv
+	on tn.ma_nvien = nv.manv
+	group by nv.honv, nv.tenlot, nv.tennv
+END;
+
+BEGIN
+	declare @honvien nvarchar(30);
+	declare @tenlotnv nvarchar(30);
+	declare @tennvien nvarchar(30);
+	declare @sluong INT;
+	exec nvinfo '2', @honvien OUTPUT, @tenlotnv OUTPUT, @tennvien OUTPUT, @sluong OUTPUT;
+	print N'Họ tên nhân viên: ' + @honvien + ' ' + @tenlotnv + ' ' + @tennvien;
+	print N'Số lượng thân nhân của nhân viên: ' + convert(varchar(2), @sluong);
+END;

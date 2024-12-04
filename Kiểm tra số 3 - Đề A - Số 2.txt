@@ -1,0 +1,101 @@
+Câu 1: Hiển thị dạng văn bản cho biết danh sách các phòng ban gồm các thông tin: tên
+phòng ban, họ tên trưởng phòng và ngày nhận chức của trưởng phòng.
+
+select pb.tenphg, tp.honv + ' ' + tp.tenlot + ' ' + tp.tennv, pb.ng_nhanchuc
+from NHANVIEN tp
+join PHONGBAN pb
+on tp.manv = pb.trphg;
+
+create procedure showpb as
+BEGIN
+	declare @contro cursor;
+	set @contro = cursor for
+		select pb.tenphg, tp.honv + ' ' + tp.tenlot + ' ' + tp.tennv, pb.ng_nhanchuc
+		from NHANVIEN tp
+		join PHONGBAN pb
+		on tp.manv = pb.trphg;
+	open @contro;
+	declare @tenphg		nvarchar(20);
+	declare @hotentp	nvarchar(30);
+	declare @ngaynhanchuc	date;
+	fetch next from @contro into @tenphg, @hotentp, @ngaynhanchuc;
+	while(@@FETCH_STATUS = 0)
+		BEGIN
+			print N'Tên phòng ban: ' + @tenphg;
+			print N'Họ tên trưởng phòng: ' + @hotentp;
+			print N'Ngày nhận chức: ' + convert(varchar(10), @ngaynhanchuc, 103);
+			print '---------------------------------------------';
+			fetch next from @contro into @tenphg, @hotentp, @ngaynhanchuc;
+		END;
+	close @contro;
+	deallocate @contro;
+END;
+Câu 2: Tạo transaction thêm dữ liệu đầy đủ 1 nhân viên mới và 1 thân nhân mới của nhân viên đó
+set xact_abort on
+
+begin tran
+	begin try
+		insert into NHANVIEN
+		values ('021', N'Trần', N'Quang', N'Minh', '2002-09-14', N'144 Tôn Đức Thắng, Nha Trang', N'Nam', 45000, '021', '11');
+		insert into THANNHAN
+		values ('021', N'Ngô Hữu Linh', '2002-05-15', N'Nữ', N'Vợ');
+		commit
+	end try
+	begin catch
+		ROLLBACK
+		declare @ErrorMessage varchar(200);
+		select @ErrorMessage = ERROR_MESSAGE();
+		RAISERROR(@ErrorMessage, 16, 1);
+	end catch
+Câu 3: Tạo Trigger kiểm soát lương của nhân viên mới khi thêm dữ liệu. Nếu lương của nhân viên < 5.000.000 thì thiết lập về mức 5.000.000
+
+create trigger trg_nv
+on NHANVIEN
+after insert
+as
+begin
+	update NHANVIEN
+	set luong = 5000000
+	from inserted
+	where (NHANVIEN.manv = inserted.manv) AND (NHANVIEN.luong < 5000000)
+end;
+
+Câu 4: Viết thủ tục hoặc hàm thực hiện công việc sau: liệt kê tên phòng ban và số lượng
+đề án của 1 phòng ban có mã xác định trước
+create procedure pbinfor (@maphg varchar(9), @tenphg nvarchar(30) OUTPUT, @sl INT OUTPUT)
+as
+BEGIN
+	select @tenphg = da.phong, @sl = count(da.mada)
+	from PHONGBAN pb
+	LEFT JOIN DEAN da
+	on pb.maphg = da.mada
+	where @maphg = pb.maphg
+	group by da.phong;
+END;
+
+BEGIN
+	declare @tenphong nvarchar(30);
+	declare @soluong INT;
+	exec pbinfor '3', @tenphong OUTPUT, @soluong OUTPUT;
+	print N'Tên phòng ban: ' + @tenphong;
+	print N'Số lượng đề án: ' + convert(varchar(5), @soluong);
+END;
+
+Câu 5: Viết thủ tục hoặc hàm thực hiện công việc sau: cho biết số lượng nhân viên nam
+tham gia một đề án có số đề án được xác định trước
+create function func_nvnam (@soda varchar(2)) RETURNS INT
+as
+BEGIN
+	declare @count INT;
+	select @count = count(nv.manv) 
+	from  PHANCONG pc
+	LEFT JOIN NHANVIEN nv
+	on pc.ma_nvien = nv.manv
+	where nv.phai LIKE N'Nam' AND @soda = pc.soda
+	RETURN @count;
+END;
+
+BEGIN
+	declare @sl INT = dbo.func_nvnam('3');
+	print N'Số lượng nhân viên nam tham gia vào đề án: ' + convert(varchar(2), @sl);
+END;
